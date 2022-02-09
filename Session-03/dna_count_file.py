@@ -11,3 +11,4 @@ with open("sequences.txt", "r") as f:
         print("Total lenght:", len(new_seq))
         for k, v in count_bases(new_seq).items():
             print(k + ":", v)
+
