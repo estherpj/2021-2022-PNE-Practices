@@ -24,7 +24,20 @@ def seq_read_fasta(filename):
 
 
 #exercise 3
-def seq_len(seq_needed):
-    total_len = len(seq_needed)
+def seq_len(seq):
+    FOLDER = "./sequences/"
+    list_genes = seq
+    data_list = []
+    for g in list_genes:
+        data_list.append(len((seq_read_fasta(g))))
+    return data_list
+
+def print_seq_len(data_list):
+    print("-----| Exercise 3 |------\nGene U5--> Length:",data_list[0],
+          "\nGene ADA --> Length:",data_list[1],
+          "\nGene FRAT1 --> Length:",data_list[2],
+          "\nGene FXN --> Length:",data_list[3])
+
+
 
 
