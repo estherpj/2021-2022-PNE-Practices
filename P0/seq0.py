@@ -95,3 +95,58 @@ def print_info_count(seq,total_bases_count):
         print("Gene",seq[l],":")
         for key, value in total_bases_count[l].items():
             print(key,":",value)
+
+
+def print_info_exercise5(seq,total_bases_count):
+    print("-----| Exercise 5 |------")
+    for l in range(0,len(seq)):
+        print("Gene",seq[l],":",total_bases_count[l])
+
+
+#exercise 6
+def seq_reverse(seq):
+    reversed_string = seq[::-1]
+    return reversed_string
+
+#exercise 7
+def seq_complement(seq):
+    comp_string = ""
+    for i in range(0,len(seq)):
+        if seq[i] == "A":
+            comp_string += "T"
+        elif seq[i] == "C":
+            comp_string += "G"
+        elif seq[i] == "G":
+            comp_string += "C"
+        elif seq[i] == "T":
+            comp_string += "A"
+    return comp_string
+
+#exercise 8
+def most_frq_base(list_genes):
+    frequent_letters = []
+    for dic in list_genes:
+        v = list(dic.values())
+        k = list(dic.keys())
+        frequent_letters.append(k[v.index(max(v))])
+
+    return frequent_letters
+
+def print_frequency_bases(seq, frequent_letters):
+    print("Gene",seq[0]+":Most frequent Base:",frequent_letters[0],
+          "\nGene",seq[1]+":Most frequent Base:",frequent_letters[1],
+          "\nGene",seq[2]+":Most frequent Base:",frequent_letters[2],
+          "\nGene",seq[3]+":Most frequent Base:",frequent_letters[3])
+
+
+
+
+
+
+
+
+
+
+
+
+
