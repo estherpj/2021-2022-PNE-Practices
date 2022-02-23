@@ -137,16 +137,3 @@ def print_frequency_bases(seq, frequent_letters):
           "\nGene",seq[1]+":Most frequent Base:",frequent_letters[1],
           "\nGene",seq[2]+":Most frequent Base:",frequent_letters[2],
           "\nGene",seq[3]+":Most frequent Base:",frequent_letters[3])
-
-
-
-
-
-
-
-
-
-
-
-
-
