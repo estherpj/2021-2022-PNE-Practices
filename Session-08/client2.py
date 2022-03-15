@@ -3,8 +3,8 @@ import termcolor
 import colorama #colorma package will wokr anywhere
 
 # SERVER IP, PORT
-PORT = 21000
-IP = "212.128.253.64"
+PORT = 8000
+IP = "localhost"
 
 # First, create the socket
 # We will always use this parameters: AF_INET y SOCK_STREAM

@@ -1,8 +1,8 @@
 import socket
 
 # Configure the Server's IP and PORT
-PORT = 8000
-IP = "localhost"
+IP = "127.0.0.1"
+PORT = 8080
 MAX_OPEN_REQUESTS = 5
 
 # Counting the number of connections
@@ -19,7 +19,7 @@ try:
     while True:
         # accept connections from outside
         print("Waiting for connections at {}, {} ".format(IP, PORT))
-        (clientsocket, address) = serversocket.accept()
+        (clientsocket, address) = serversocket.accept()#when a client connects to it, this call return a separate socket
 
         # Another connection!e
         number_con += 1
