@@ -40,11 +40,11 @@ def process_client(s):
     header = "Content-Type: text/plain\n" #this is plain and not html (sends only plain text)
 
     # -- Add the Content-Length
-    header += f"Content-Length: {len(body)}\n"
+    header += f"Content-Length: {len(body)}\n" #the browser needs to know the lenght of the  body
 
     # -- Build the message by joining together all the parts
-    response_msg = status_line + header + "\n" + body
-    cs.send(response_msg.encode())
+    response_msg = status_line + header + "\n" + body #due to the structure of the response, blanck line
+    cs.send(response_msg.encode()) #encode this in to a series of bytes
 
 
 # -------------- MAIN PROGRAM
