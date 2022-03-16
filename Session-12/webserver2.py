@@ -1,5 +1,6 @@
 import socket
 import termcolor
+import pathlib
 
 
 # -- Server network parameters
@@ -29,22 +30,30 @@ def process_client(s):
     # header
     # blank line
     # Body (content to send)
-
-    # -- Let's start with the body
-    body = "Hello this is my new server!\n"
+    route = req_line.split(" ")[1]
+    print("ROUTE", route)
+    body = pathlib.Path("html/index.html").read_text()
+    """if route == "/":
+        # This new contents are written in HTML language
+        body = pathlib.Path("html/index.html").read_text()
+    elif route == "/goodbye":
+        body = pathlib.Path("html/goodbye.html").read_text()"""
+    """else:
+            filename = route[1:0]
+            body = pathlib.Path("html/+ filename + .html").read_text()"""
 
     # -- Status line: We respond that everything is ok (200 code)
     status_line = "HTTP/1.1 200 OK\n"
 
     # -- Add the Content-Type header
-    header = "Content-Type: text/plain\n" #this is plain and not html (sends only plain text)
+    header = "Content-Type: text/html\n"
 
     # -- Add the Content-Length
-    header += f"Content-Length: {len(body)}\n" #the browser needs to know the lenght of the  body
+    header += f"Content-Length: {len(body)}\n"
 
     # -- Build the message by joining together all the parts
-    response_msg = status_line + header + "\n" + body #due to the structure of the response, blanck line
-    cs.send(response_msg.encode()) #encode this in to a series of bytes
+    response_msg = status_line + header + "\n" + body
+    cs.send(response_msg.encode())
 
 
 # -------------- MAIN PROGRAM
@@ -79,3 +88,6 @@ while True:
 
         # -- Close the socket
         cs.close()
+
+
+#favicon --> emoticono
