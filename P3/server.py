@@ -2,6 +2,31 @@ import socket
 from Seq1 import Seq
 from termcolor import colored
 
+def info_operation():
+    arg = split_list[1]
+    response = "Sequence:" + arg + "\n"
+    response += "Total length:" + str(seq.len()) + "\n"
+    dictionary_bases = seq.percentages_bases()
+    response += ""
+    for k, v in dictionary_bases.items():
+        response += k + ":" + str(v[0]) + "(" + str(round(v[1], 1)) + "%" + ")" + "\n"
+    return response
+
+def get_stringbases():
+    arg = split_list[1]
+    if arg == "0":
+        response = "GET 0: ACCTCCTCTCCAGCAATGCCAACCCCAGTCCAGGCCCCCATCCGCCCAGGATCTCGATCA\n"
+    elif arg == "1":
+        response = "GET 1: AAAAACATTAATCTGTGGCCTTTCTTTGCCATTTCCAACTCTGCCACCTCCATCGAACGA\n"
+    elif arg == "2":
+        response = "GET 2: CAAGGTCCCCTTCTTCCTTTCCATTCCCGTCAGCTTCATTTCCCTAATCTCCGTACAAAT\n"
+    elif arg == "3":
+        response = "GET 3: CCCTAGCCTGACTCCCTTTCCTTTCCATCCTCACCAGACGCCCGCATGCCGGACCTCAAA\n"
+    elif arg == "4":
+        response = "GET 4: AGCGCAAACGCTAAAAACCGGTTGAGTTGACGCACGGAGAGAAGGGGTGTGTGGGTGGGT\n"
+    return response
+
+
 ls = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 ls.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 
@@ -41,40 +66,25 @@ while True:
             response = "OK\n"
 
         elif cmd == "GET":
-            arg = split_list[1]
-            if arg == "0":
-                response = "GET 0: ACCTCCTCTCCAGCAATGCCAACCCCAGTCCAGGCCCCCATCCGCCCAGGATCTCGATCA\n"
-                print(response)
-            elif arg == "1":
-                response = "GET 1: AAAAACATTAATCTGTGGCCTTTCTTTGCCATTTCCAACTCTGCCACCTCCATCGAACGA\n"
-                print(response)
-            elif arg == "2":
-                response = "GET 2: CAAGGTCCCCTTCTTCCTTTCCATTCCCGTCAGCTTCATTTCCCTAATCTCCGTACAAAT\n"
-                print(response)
-            elif arg == "3":
-                response = "GET 3: CCCTAGCCTGACTCCCTTTCCTTTCCATCCTCACCAGACGCCCGCATGCCGGACCTCAAA\n"
-                print(response)
-            elif arg == "4":
-                response = "GET 4: AGCGCAAACGCTAAAAACCGGTTGAGTTGACGCACGGAGAGAAGGGGTGTGTGGGTGGGT\n"
-                print(response)
+            response = get_stringbases()
+            print(response)
 
         elif cmd == "REV":
             response = seq.seq_reverse() + "\n"
+            print(response)
 
         elif cmd == "INFO":
-            response = "Sequence:" + arg + "\n"
-            response += "Total length:" + str(seq.len()) + "\n"
-            dictionary_bases = seq.percentages_bases()
-            response += ""
-            for k, v in dictionary_bases.items():
-                response += k + ":" + str(v[0]) + "(" + str(round(v[1],1)) + "%" + ")" + "\n"
+            response = info_operation()
+            print(response)
 
         elif cmd == "COMP":
-                response = seq.seq_complement() + "\n"
+            response = seq.seq_complement() + "\n"
+            print(response)
 
         elif cmd == "GENE":
             s1 = Seq()
             response = s1.read_fasta(str(arg))
+            print(response)
 
         else:
             response = "This command is not available in the server.\n"
