@@ -1,4 +1,5 @@
 import socket
+from termcolor import colored
 
 # Configure the Server's IP and PORT
 IP = "127.0.0.1"
@@ -24,12 +25,12 @@ try:
         # Another connection!e
         number_con += 1
 
-        # Print the conection number
+        # Print the connection number
         print("CONNECTION: {}. From the IP: {}".format(number_con, address))
 
         # Read the message from the client, if any
         msg = clientsocket.recv(2048).decode("utf-8")
-        print("Message from client: {}".format(msg))
+        print("Message from client: {}".format(colored(msg,"green")))
 
         # Send the messag
         message = "Hello from the teacher's server"

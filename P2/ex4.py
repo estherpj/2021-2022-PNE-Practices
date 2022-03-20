@@ -10,19 +10,20 @@ IP = "127.0.0.1"
 PORT = 8080
 c = Client(IP, PORT)
 print(f"Connection to SERVER at {c.ip}, PORT: {c.port}")
-s1 = Seq()
-s1.read_fasta("U5")
-s2 = Seq()
-s2.read_fasta("FRAT1")
-s3 = Seq()
-s3.read_fasta("ADA")
 
-sequences = [s1,s2,s3]
-for s in sequences:
-    s.talk(s.strbases)
+names_sequences = ["U5","FRAT1","ADA"]
+for s in names_sequences:
+    s1 = Seq()
+    s1.read_fasta(s)
 
-print("To Server:")
-termcolor.cprint(("Sending U5 Gene to the server..."),"blue")
-response = c.talk("Testing!!!")
-print("From Server:")
-termcolor.cprint(response,"green")
+    print("To Server: ", end="")
+    termcolor.cprint(f"Sending {s} Gene to the server...", "blue")
+    response1 = c.talk(f"Sending {s} Gene to the server...")
+    print("From Server:\n")
+    termcolor.cprint(response1, "green")
+
+    print("\nTo Server: ", end="")
+    response2 = c.talk(s1.strbases)
+    termcolor.cprint(s1.strbases, "blue")
+    print("From Server:\n")
+    termcolor.cprint(response2 + "\n", "green")
