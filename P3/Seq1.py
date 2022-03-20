@@ -100,6 +100,17 @@ class Seq:
         self.strbases = seq
         return seq
 
+    def percentages_bases(self):
+        diccionary = self.seq_count_base()
+        sum_values = sum(diccionary.values())
+        for k,v in diccionary.items():
+            diccionary[k] = [v, (v*100)/sum_values]
+        return diccionary
+
+
+
+
+
 
 
 

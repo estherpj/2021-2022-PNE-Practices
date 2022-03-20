@@ -64,13 +64,13 @@ while True:
         elif cmd == "INFO":
             response = "Sequence:" + arg + "\n"
             response += "Total length:" + str(seq.len()) + "\n"
-            dictionary_bases = seq.seq_count_base()
+            dictionary_bases = seq.percentages_bases()
             response += ""
             for k, v in dictionary_bases.items():
-                response += k + ":" + str(v) +"("+ str(round(((v*100)/seq.len()),1)) + "%" + ")" + "\n"
+                response += k + ":" + str(v[0]) + "(" + str(round(v[1],1)) + "%" + ")" + "\n"
 
         elif cmd == "COMP":
-            response = seq.seq_complement() + "\n"
+                response = seq.seq_complement() + "\n"
 
         elif cmd == "GENE":
             s1 = Seq()
@@ -81,5 +81,3 @@ while True:
 
         cs.send(response.encode())
         cs.close()
-
-#we have to run the server when we make a change in it
