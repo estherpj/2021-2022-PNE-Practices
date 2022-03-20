@@ -12,19 +12,12 @@ def info_operation():
         response += k + ":" + str(v[0]) + "(" + str(round(v[1], 1)) + "%" + ")" + "\n"
     return response
 
-def get_stringbases():
-    arg = split_list[1]
-    if arg == "0":
-        response = "GET 0: ACCTCCTCTCCAGCAATGCCAACCCCAGTCCAGGCCCCCATCCGCCCAGGATCTCGATCA\n"
-    elif arg == "1":
-        response = "GET 1: AAAAACATTAATCTGTGGCCTTTCTTTGCCATTTCCAACTCTGCCACCTCCATCGAACGA\n"
-    elif arg == "2":
-        response = "GET 2: CAAGGTCCCCTTCTTCCTTTCCATTCCCGTCAGCTTCATTTCCCTAATCTCCGTACAAAT\n"
-    elif arg == "3":
-        response = "GET 3: CCCTAGCCTGACTCCCTTTCCTTTCCATCCTCACCAGACGCCCGCATGCCGGACCTCAAA\n"
-    elif arg == "4":
-        response = "GET 4: AGCGCAAACGCTAAAAACCGGTTGAGTTGACGCACGGAGAGAAGGGGTGTGTGGGTGGGT\n"
-    return response
+
+sequences = ["ACCTCCTCTCCAGCAATGCCAACCCCAGTCCAGGCCCCCATCCGCCCAGGATCTCGATCA",
+             "AAAAACATTAATCTGTGGCCTTTCTTTGCCATTTCCAACTCTGCCACCTCCATCGAACGA",
+             "CAAGGTCCCCTTCTTCCTTTCCATTCCCGTCAGCTTCATTTCCCTAATCTCCGTACAAAT",
+             "CCCTAGCCTGACTCCCTTTCCTTTCCATCCTCACCAGACGCCCGCATGCCGGACCTCAAA",
+             "AGCGCAAACGCTAAAAACCGGTTGAGTTGACGCACGGAGAGAAGGGGTGTGTGGGTGGGT"]
 
 
 ls = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -66,8 +59,16 @@ while True:
             response = "OK\n"
 
         elif cmd == "GET":
-            response = get_stringbases()
-            print(response)
+            arg = split_list[1]
+            try:
+                index = int(arg)
+                needed_seq = sequences[index]
+                response = needed_seq
+            except ValueError:
+                response = "The argument must be an INTEGER number between 0 and 4\n"
+            except IndexError:
+                response = "The argument must be a number between 0 and 4\n"
+
 
         elif cmd == "REV":
             response = seq.seq_reverse() + "\n"
