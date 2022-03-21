@@ -75,17 +75,23 @@ while True:
             print(response)
 
         elif cmd == "INFO":
-            response = info_operation()
-            print(response)
+            try:
+                response = info_operation()
+                print(response)
+            except ZeroDivisionError:
+                response = "Can not perform this operation\n"
 
         elif cmd == "COMP":
             response = seq.seq_complement() + "\n"
             print(response)
 
         elif cmd == "GENE":
-            s1 = Seq()
-            response = s1.read_fasta(str(arg))
-            print(response)
+            try:
+                s1 = Seq()
+                response = s1.read_fasta(str(arg))
+                print(response)
+            except FileNotFoundError:
+                response = "The file was not found, please enter a correct one\n"
 
         else:
             response = "This command is not available in the server.\n"
