@@ -33,7 +33,7 @@ msg = c.talk("GET 4")
 print(msg)
 
 #INFO
-print("* Testing INFO...")
+print("\n* Testing INFO...")
 msg = c.talk("INFO ATGA")
 print(msg)
 
