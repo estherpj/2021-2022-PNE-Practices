@@ -1,5 +1,8 @@
 from Seq1 import Seq
 
+PRACTICE = 1
+EXERCISE = 7
+print(f"-----| Practice {PRACTICE}, Exercise {EXERCISE} |------")
 s1 = Seq()
 print(f"Sequence 0: (Length: {s1.len()}"")", s1,
       "\n\tBases:",s1.seq_count_base(),

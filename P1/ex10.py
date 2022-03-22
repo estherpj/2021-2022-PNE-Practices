@@ -1,5 +1,10 @@
 from Seq1 import Seq
 
+PRACTICE = 1
+EXERCISE = 10
+print(f"-----| Practice {PRACTICE}, Exercise {EXERCISE} |------")
+
+
 list_sequences = ["U5","ADA","FRAT1","FXN","RNU6_269P"]
 
 try:

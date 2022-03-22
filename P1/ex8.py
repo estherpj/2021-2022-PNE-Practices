@@ -1,5 +1,8 @@
 from Seq1 import Seq
 
+PRACTICE = 1
+EXERCISE = 8
+print(f"-----| Practice {PRACTICE}, Exercise {EXERCISE} |------")
 sequence_list = ["ACTGA","Invalid sequence"]
 
 s1 = Seq()

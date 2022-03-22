@@ -1,4 +1,9 @@
 from Seq1 import Seq
+
+PRACTICE = 1
+EXERCISE = 2
+print(f"-----| Practice {PRACTICE}, Exercise {EXERCISE} |------")
+
 seq1 = Seq()
 seq2 = Seq("ACTGA")
 
