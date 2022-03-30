@@ -37,9 +37,13 @@ def process_client(s):
     elif route == "/goodbye":
         body = pathlib.Path("html/goodbye.html").read_text()
     else:
-        filename = route[1:]
-        file = filename.split("/")[1]
-        body = pathlib.Path("html/" + file + ".html").read_text()
+        try:
+            filename = route[1:]
+            file = filename.split("/")[1]
+            body = pathlib.Path("html/" + file + ".html").read_text()
+        except IndexError:
+            body = pathlib.Path("html/error.html").read_text()
+
 
     # -- Status line: We respond that everything is ok (200 code)
     status_line = "HTTP/1.1 200 OK\n"
