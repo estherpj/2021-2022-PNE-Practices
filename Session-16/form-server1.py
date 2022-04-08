@@ -1,9 +1,11 @@
 import http.server
 import socketserver
 import termcolor
-import pathlib
+from pathlib import Path
+
 # Define the Server's port
 PORT = 8080
+
 
 # -- This is for preventing the error: "Port already in use"
 socketserver.TCPServer.allow_reuse_address = True
@@ -17,41 +19,28 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
         """This method is called whenever the client invokes the GET method
         in the HTTP protocol request"""
 
-        print("GET received! Request line:")
-
         # Print the request line
-        termcolor.cprint("  " + self.requestline, 'green')
+        termcolor.cprint(self.requestline, 'green')
 
-        # Print the command received (should be GET)
-        print("  Command: " + self.command)
+        # Open the form1.html file
+        # Read the index from the file
+        contents = Path('form-1.html').read_text()
 
-        # Print the resource requested (the path)
-        print("  Path: " + self.path)
-        if self.path == "/":
-            contents = pathlib.Path("html/index.html").read_text()
-        elif self.path == "/goodbye":
-            contents = pathlib.Path("html/goodbye.html").read_text()
-        else:
-            try:
-                filename = self.path[1:]
-                file = filename.split("/")[1]
-                contents = pathlib.Path("html/" + file + ".html").read_text()
-            except IndexError:
-                contents = pathlib.Path("html/error.html").read_text()
-
+        # Generating the response message
         self.send_response(200)  # -- Status line: OK!
 
         # Define the content-type header:
         self.send_header('Content-Type', 'text/html')
-        self.send_header('Content-Length', len(contents.encode()))
+        self.send_header('Content-Length', len(str.encode(contents)))
 
         # The header is finished
         self.end_headers()
 
         # Send the response message
-        self.wfile.write(contents.encode())
+        self.wfile.write(str.encode(contents))
 
         return
+
 
 # ------------------------
 # - Server MAIN program
