@@ -24,14 +24,24 @@
     </form>
     <hr>
     <form action ="/gene">
-        Get a sequence. Select sequence number
+        Get a gene. Select a name
         <select name="g_name">
             {% for g in context.genes %}
             <option value={{g}}>{{g}}</option>
             {% endfor %}
         </select>
         <input type="submit" value="GET">
-
     </form>
+    <hr>
+    <form action ="/operation">
+            Write a sequence. Select a name <input type="text" name="sequence">
+            <select name="g_name">
+                {% for g in context.genes %}
+                <option value={{g}}>{{g}}</option>
+                {% endfor %}
+            </select>
+            <input type="submit" value="GET">
+        </form>
+
 </body>
 </html>

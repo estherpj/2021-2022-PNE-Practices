@@ -66,3 +66,8 @@ with socketserver.TCPServer(("", PORT), Handler) as httpd:
         print("")
         print("Stopped by the user")
         httpd.server_close()
+
+
+
+        #when u pass the string withh the html file, if you add /n you get everything in the line--> when create the string
+        #need to have html format, you can write br or also put a <p> contents </p> --> should compile wity html not python
