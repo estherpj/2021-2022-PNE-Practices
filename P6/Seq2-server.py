@@ -2,25 +2,45 @@ import http.server
 import socketserver
 import termcolor
 import pathlib
-from urllib.parse import urlparse, parse_qs
+import urllib.parse as u
+import jinja2 as j
 
 PORT = 8080
 socketserver.TCPServer.allow_reuse_address = True
+HTML_FOLDER = "./html/"
+LIST_SEQUENCES = ["AGTGGGAAATTTCCC", "GGTTAACCAAG","AGTTGACCAATT","CCAGTAGCTAAG", "AAAAAGGGCCCTTT"]
+LIST_GENES = ["ADA", "FRAT1","FXN","U5","RNU6_269P"]
+def read_html_file(filename):
+    contents = pathlib.Path(HTML_FOLDER + filename).read_text()
+    contents = j.Template(contents)
+    return contents
+
+
 class TestHandler(http.server.BaseHTTPRequestHandler):
 
     def do_GET(self):
         print("GET received! Request line:")
         termcolor.cprint("  " + self.requestline, 'green')
+        url_path = u.urlparse(self.path)
+        path = url_path.path
+        arguments = u.parse_qs(url_path.query)
+
         print("  Command: " + self.command)
         print("  Path: " + self.path)
 
         if self.path == "/":
-            contents = pathlib.Path("html/form-1.html").read_text()
+            contents = read_html_file("index.html").render(context={"n_sequences": len(LIST_SEQUENCES), "genes":LIST_GENES})
+        elif path == "/ping":
+            contents = read_html_file(path[1:]+".html").render()
+        elif path == "/get":
+            n_sequence = int(arguments["n_sequence"][0])
+            sequence = LIST_SEQUENCES[n_sequence]
+            contents = read_html_file(path[1:]+".html").render(context={"n_sequence": n_sequence, "sequence":sequence})
+        elif path == "/gene":
+            g_name = arguments["g_name"][0]
+            sequence = pathlib.Path("./sequences/"+ g_name + ".txt").read_text()
+            contents = read_html_file(path[1:] + ".html").render(context={"g_name":g_name, "sequence": sequence})
 
-        elif self.path.startswith("/echo"):
-            message = parse_qs(urlparse(self.path).query)["msg"][0]
-            print("message is", message)
-            contents = pathlib.Path("html/template.html").read_text().format(message)
         else:
             contents = pathlib.Path("html/error.html").read_text()
 
