@@ -4,6 +4,7 @@ import termcolor
 import pathlib
 import urllib.parse as u
 import jinja2 as j
+from Seq1 import Seq
 
 PORT = 8080
 socketserver.TCPServer.allow_reuse_address = True
@@ -41,6 +42,12 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
             sequence = pathlib.Path("./sequences/"+ g_name + ".txt").read_text()
             contents = read_html_file(path[1:] + ".html").render(context={"g_name":g_name, "sequence": sequence})
 
+        elif path == "/operation":
+
+            contents = read_html_file(path[1:]+ ".html").render(context={"operation":operation,"result": result,"sequence":sequence})
+
+
+
         else:
             contents = pathlib.Path("html/error.html").read_text()
 
@@ -66,7 +73,6 @@ with socketserver.TCPServer(("", PORT), Handler) as httpd:
         print("")
         print("Stopped by the user")
         httpd.server_close()
-
 
 
         #when u pass the string withh the html file, if you add /n you get everything in the line--> when create the string

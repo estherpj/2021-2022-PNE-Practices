@@ -35,13 +35,14 @@
     <hr>
     <form action ="/operation">
             Write a sequence. Select a name <input type="text" name="sequence">
-            <select name="g_name">
+            <select name="operation">
                 {% for g in context.genes %}
-                <option value={{g}}>{{g}}</option>
+                <option value={{o}}>{{o}}</option>
                 {% endfor %}
             </select>
             <input type="submit" value="GET">
         </form>
+
 
 </body>
 </html>
