@@ -11,6 +11,7 @@ socketserver.TCPServer.allow_reuse_address = True
 HTML_FOLDER = "./html/"
 LIST_SEQUENCES = ["AGTGGGAAATTTCCC", "GGTTAACCAAG","AGTTGACCAATT","CCAGTAGCTAAG", "AAAAAGGGCCCTTT"]
 LIST_GENES = ["ADA", "FRAT1","FXN","U5","RNU6_269P"]
+
 def read_html_file(filename):
     contents = pathlib.Path(HTML_FOLDER + filename).read_text()
     contents = j.Template(contents)
@@ -41,12 +42,22 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
             g_name = arguments["g_name"][0]
             sequence = pathlib.Path("./sequences/"+ g_name + ".txt").read_text()
             contents = read_html_file(path[1:] + ".html").render(context={"g_name":g_name, "sequence": sequence})
-
         elif path == "/operation":
-
-            contents = read_html_file(path[1:]+ ".html").render(context={"operation":operation,"result": result,"sequence":sequence})
-
-
+            sequence = arguments["sequence"][0]
+            seq = Seq(sequence)
+            good_seq = seq.valid_sequence1()
+            operation = arguments["operation"][0]
+            if operation == "Rev":
+                seq_rev = seq.seq_reverse()
+                contents = read_html_file(path[1:] + ".html").render(context={"operation": operation, "result": seq_rev, "sequence": seq})
+            elif operation == "Comp":
+                seq_comp = seq.seq_complement()
+                contents = read_html_file(path[1:] + ".html").render(context={"operation": operation, "result": seq_comp, "sequence": seq})
+            elif operation == "Info":
+                seq_count = seq.seq_count_base()
+                seq_len = seq.len()
+                info_list = [seq_count, seq_len]
+                contents = read_html_file(path[1:] + ".html").render(context={"operation": operation, "result": info_list, "sequence": seq})
 
         else:
             contents = pathlib.Path("html/error.html").read_text()
