@@ -17,6 +17,13 @@ def read_html_file(filename):
     contents = j.Template(contents)
     return contents
 
+def dictionary_data(dictionary,sequence):
+    length_seq = len(sequence)
+    result = ""
+    for k,v in dictionary.items():
+        result += k + ":" + str(v) + "\n"
+    format_text = "Total length: " + str(length_seq) + "\n" + result
+    return format_text
 
 class TestHandler(http.server.BaseHTTPRequestHandler):
 
@@ -45,7 +52,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
         elif path == "/operation":
             sequence = arguments["sequence"][0]
             seq = Seq(sequence)
-            good_seq = seq.valid_sequence1()
+            seq.valid_sequence1()
             operation = arguments["operation"][0]
             if operation == "Rev":
                 seq_rev = seq.seq_reverse()
@@ -55,9 +62,8 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                 contents = read_html_file(path[1:] + ".html").render(context={"operation": operation, "result": seq_comp, "sequence": seq})
             elif operation == "Info":
                 seq_count = seq.seq_count_base()
-                seq_len = seq.len()
-                info_list = [seq_count, seq_len]
-                contents = read_html_file(path[1:] + ".html").render(context={"operation": operation, "result": info_list, "sequence": seq})
+                result = dictionary_data(seq_count,sequence)
+                contents = read_html_file(path[1:] + ".html").render(context={"operation": operation, "result": result, "sequence": seq})
 
         else:
             contents = pathlib.Path("html/error.html").read_text()
