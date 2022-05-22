@@ -5,25 +5,47 @@
     <title>Welcome</title>
 
 </head>
-<body>
-    <h1>Browsing human and Vertebrates genome</h1>
+<body style="background-color: #89cff0;">
+    <h1>Browsing Human and Vertebrates genome</h1>
     <h2>BASIC Level Services</h2>
-    <p>1)List of species in the genome database</p>
+    <p>1) List of species in the genome database</p>
     <form action ="/listSpecies">
         Limit:<input type="text" name="n_species">
-        <input type="submit" value="Send">
+        <p></p><input type="submit" value="Send"></p>
     </form>
     <form action ="/karyotype">
-        <p>2)Information about the karyotype:</p>
-        Select the species: <input type="text" name="karyotype">
-        <input type="submit" value="Send">
+        <p>2) Information about the karyotype:</p>
+        Select the species: <input type="text" name="specie">
+        <p></p><input type="submit" value="Send"></p>
     </form>
-    <form action ="/length">
-        <p>3)Chromosome Length</p>
-            Select the species: <input type="text" name="spe_length">
-            Select a chromosome: <input type="text" name="chrom_length">
-            <input type="submit" value="Send">
+    <form action ="/chromosomeLength">
+        <p>3) Chromosome Length</p>
+            Select the species: <input type="text" name="specie">
+        <p>Select a chromosome: <input type="text" name="chromo"></p>
+           <p></p> <input type="submit" value="Send"></p>
     </form>
+    <form action="/geneSeq">
+         <p>4) Sequence of given human gene</p>
+        Enter sequence name: <input type="text" name="gene">
+         <p></p> <input type="submit" value="Send"></p>
+    </form>
+    <form action="/geneInfo">
+         <p>5) Information of given human gene</p>
+        Enter sequence name: <input type="text" name="gene">
+         <p></p> <input type="submit" value="Send"></p>
+    </form>
+    <form action="/geneCalc">
+         <p>6) Calculus of bases of the gene</p>
+        Enter sequence name: <input type="text" name="gene">
+         <p></p> <input type="submit" value="Send"></p>
+    </form>
+    <form action="/geneList">
+         <p>7) Genes inside a chromosome</p>
+        Enter a human chromosome: <input type="text" name="chromo">
+        <p>Start:<input type="text" name="start"></p><p>End:<input type="text" name="end"></p>
+        <p></p><input type="submit" value="Send"></p>
+    </form>
+
 </body>
 </html>
 
