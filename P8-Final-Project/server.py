@@ -49,6 +49,10 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
         path = url_path.path
         arguments = u.parse_qs(url_path.query)
 
+        l_json = 0
+        if "json" in arguments.keys():
+            l_json = 1
+
         print("  Command: " + self.command)
         print("  Path: " + self.path)
 
@@ -57,24 +61,28 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
 
         elif path == "/listSpecies":
             try:
-                n_species = int(arguments["n_species"][0])
+
                 dictionary_info = dic_info_server("info/species")
                 species_info_list = dictionary_info["species"]
                 species_list = []
                 for i in species_info_list:
                     species_list.append(i["common_name"])
+                total_species = len(species_list)
+                n_species = int(arguments["limit"][0])
+                species_list_result = species_list[0:n_species]
 
-                correct_list_species = []
-                for i in species_list:
-                    if i not in correct_list_species:
-                        correct_list_species.append(i)
-                    else:
-                        pass
-                total_species = len(correct_list_species)
-                species_html = "<br><br>"
-                for n in correct_list_species[0:n_species]:
-                    species_html += "<ul>" + "<li>" + " " + n + "<br>" + "</li>" + "</ul>"
-                contents = read_html_file("listSpecies.html").render(context={"species": species_html,"total_species": total_species,"n_species": n_species})
+                if l_json == 0:
+                    species_html = "<br><br>"
+                    for n in species_list_result:
+                        species_html += "<ul>" + "<li>" + " " + n + "<br>" + "</li>" + "</ul>"
+                    contents = read_html_file("listSpecies.html").render(context={"species": species_html,"total_species": total_species,"limit": n_species})
+
+                elif l_json == 1:
+                    species_json = "{'species': "
+                    species_json += json.dumps(species_list_result)
+                    species_json += "}"
+                    contents = species_json
+
 
             except ValueError:
                 contents = pathlib.Path("html/error.html").read_text()
@@ -86,7 +94,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
             species_name = []
             for i in species_info_list:
                 species_name.append(i["common_name"])
-            if species not in species_info_list:
+            if species not in species_name:
                 contents = pathlib.Path("html/error.html").read_text()
             else:
                 dic_specie = dic_info_server("info/assembly/" + species)
@@ -112,7 +120,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
             gene = arguments["gene"][0]
             dic_specie_gene = dic_info_server("lookup/symbol/homo_sapiens/"+gene)
             id_gene = dic_specie_gene["id"]
-            dic_gene = dic_info_server("sequence/id/"+id_gene)
+            dic_gene = dic_info_server("sequence/id/" + id_gene)
             sequence_gene = dic_gene["seq"]
             correct_sequence_gene = ""
             n = 0
@@ -156,11 +164,19 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
             genes_found = []
             for i in list_chromosome:
                 for n in i["phenotype_associations"]:
-                    for e in n:
-                        for c in e["attributes"]:
+                    genes_found.append(n)
 
+            genes_f = []
+            for i in genes_found:
+                if "attributes" in i.keys():
+                    if "associated_gene" in i["attributes"]:
+                        genes_f.append(i["attributes"]["associated_gene"])
 
-                    contents = read_html_file("chromo_genes.html").render(context={"chromo": chromo, "start": start, "end": end, "genes_found": genes_found})
+            genes_found_html = "<br><br>"
+            for n in genes_f:
+                genes_found_html += " " + n + "<br>"
+
+            contents = read_html_file("chromo_genes.html").render(context={"chromo": chromo, "start": start, "end": end, "genes_found": genes_found_html})
         else:
             contents = pathlib.Path("html/error.html").read_text()
 
