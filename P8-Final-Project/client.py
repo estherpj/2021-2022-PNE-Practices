@@ -72,9 +72,3 @@ r7 = conn.getresponse()
 print(f"Response received!: {r7.status} {r7.reason}\n")
 data7 = r7.read().decode("utf-8")
 print(data7)
-
-
-
-
-
-
