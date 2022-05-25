@@ -6,7 +6,9 @@
 </head>
 <body style="background-color:#D2B4DE;">
 The sequence of the gene is:
-<p>{{context.gene}}</p>
+{% for i in context.gene %}
+{{i}}
+{% endfor %}
 <p> <a href="/">Main page</a></p>
 
 </body>

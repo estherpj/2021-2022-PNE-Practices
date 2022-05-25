@@ -5,7 +5,12 @@
     <title>Length chromosome</title>
 </head>
 <body style="background-color:yellow;">
-The length of the chromosome is: {{context.length}}
+The length of the chromosome is:
+{% if context.length == "" %}
+<p>Sorry, the length has not been found</p>
+{% else %}
+{{context.length}}
+{% endif %}
 <p> <a href="/">Main page</a></p>
 </body>
 </html>

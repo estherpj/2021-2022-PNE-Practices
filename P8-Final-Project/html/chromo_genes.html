@@ -6,9 +6,13 @@
 </head>
 <body style="background-color:#D2B4DE;">
 The genes found in the chromosome {{context.chromo}} between {{context.start}} and {{context.end}}:
-{% for a in  context.genes_found %}
-<p>{{a}}</p>
-{% endfor %}
+{% if context.genes_found == [] %}
+    <p>No genes found</p>
+{% else %}
+    {% for a in  context.genes_found %}
+    <p>{{a}}</p>
+    {% endfor %}
+{% endif %}
 
 <p> <a href="/">Main page</a></p>
 </body>

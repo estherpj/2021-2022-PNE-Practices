@@ -6,9 +6,13 @@
 </head>
 <body style="background-color:mediumseagreen;">
 The names of the chromosomes are:
-<p>{% for a in context.karyotype %}</p>
-<p>{{a}}</p>
-{% endfor %}
+{% if context.karyotype == "no" %}
+    <p>Sorry, karyotype not found</p>
+{% else %}
+    <p>{% for a in context.karyotype %}</p>
+    <p>{{a}}</p>
+    {% endfor %}
+{% endif %}
 <p> <a href="/">Main page</a></p>
 </body>
 </html>

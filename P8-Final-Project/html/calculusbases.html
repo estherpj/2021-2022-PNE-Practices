@@ -5,7 +5,10 @@
     <title>Calculus bases</title>
 </head>
 <body style="background-color:orange;">
-The percentage and the number of bases of {{context.gene}} is: {{context.calc_bases}}
+The percentage and the number of bases of {{context.gene}} is:
+<p>{% for key,value in context.calc_bases.items() %}
+<p>{{key}}: {{value[0]}}, {{value[1]}} %
+{% endfor %}</p>
 <p> <a href="/">Main page</a></p>
 </body>
 </html>

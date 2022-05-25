@@ -68,20 +68,21 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                 species_list = []
                 for i in species_info_list:
                     species_list.append(i["name"])
+
                 total_species = len(species_list)
                 if "limit" not in arguments.keys():
-                    n_species = len(species_list)
+                    n_species = total_species
                 else:
                     n_species = int(arguments["limit"][0])
-
-                species_list_result = species_list[0:n_species]
-                if l_json == 0:
-                    contents = read_html_file("listSpecies.html").render(context={"species": species_list_result,"total_species": total_species, "limit": n_species})
-                elif l_json == 1:
-                    species_json = "{'species': "
-                    species_json += json.dumps(species_list_result)
-                    species_json += "}"
-                    contents = species_json
+                if n_species < 0:
+                    contents = pathlib.Path("html/error.html").read_text()
+                else:
+                    species_list_result = species_list[0:n_species]
+                    if l_json == 0:
+                        contents = read_html_file("listSpecies.html").render(context={"species": species_list_result,"total_species": total_species, "limit": n_species})
+                    elif l_json == 1:
+                        species_json = '{"species": ' + json.dumps(species_list_result) + "}"
+                        contents = species_json
 
             except ValueError:
                 contents = pathlib.Path("html/error.html").read_text()
@@ -100,16 +101,13 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                     dic_specie = dic_info_server("info/assembly/" + species)
                     karyotype = dic_specie["karyotype"]
                     if len(karyotype) == 0:
-                        karyotype_html = " Karyotype not found"
+                        karyotype_html = "no"
                         contents = read_html_file("karyotype.html").render(context={"karyotype": karyotype_html})
-
                     elif len(karyotype) != 0:
                         if l_json == 0:
                             contents = read_html_file("karyotype.html").render(context={"karyotype": karyotype})
                         elif l_json == 1:
-                            karyotype_json = "{'karyotype': "
-                            karyotype_json += json.dumps(karyotype)
-                            karyotype_json += "}"
+                            karyotype_json = '{"karyotype": ' + json.dumps(karyotype) + "}"
                             contents = karyotype_json
             except ValueError:
                 contents = pathlib.Path("html/error.html").read_text()
@@ -132,9 +130,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                     if l_json == 0:
                         contents = read_html_file("chromosomeLength.html").render(context={"length": length})
                     elif l_json == 1:
-                        lengthchromo_json = "{'lengthchromo': "
-                        lengthchromo_json += json.dumps(length)
-                        lengthchromo_json += "}"
+                        lengthchromo_json = '{"lengthchromo": ' + json.dumps(length) + "}"
                         contents = lengthchromo_json
                 except KeyError:
                     contents = pathlib.Path("html/error.html").read_text()
@@ -153,18 +149,10 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                     sequence_gene = dic_gene["seq"]
 
                     if l_json == 0:
-                        correct_sequence_gene = ""
-                        n = 0
-                        for i in sequence_gene:
-                            correct_sequence_gene += i
-                            n += 1
-                            if n == 100:
-                                correct_sequence_gene += "<br>"
-                                n = 0
-                        contents = read_html_file("gene.html").render(context={"gene": correct_sequence_gene})
+                        contents = read_html_file("gene_seq.html").render(context={"gene": sequence_gene})
                     elif l_json == 1:
                         sequence_gene = list(sequence_gene)
-                        contents = json.dumps(sequence_gene)
+                        contents = '{"geneSeq": ' + json.dumps(sequence_gene) + "}"
                 except KeyError:
                     contents = pathlib.Path("html/error.html").read_text()
             except KeyError:
@@ -184,8 +172,10 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                     if l_json == 0:
                         contents = read_html_file("infogene.html").render(context={"start": start_gene, "end": end_gene, "id_gene": id_gene,"chromosome": chromosome_name, "length": length})
                     elif l_json == 1:
-                        info_gene = [start_gene, end_gene, id_gene, length]
-                        contents = json.dumps(info_gene)
+                        keys_dict = ["start", "end", "id_gene", "length"]
+                        info_gen = [start_gene, end_gene,id_gene, length ]
+                        dict_info = json.dumps(dict(zip(keys_dict, info_gen)))
+                        contents = dict_info
                 except KeyError:
                     contents = pathlib.Path("html/error.html").read_text()
             except KeyError:
@@ -195,17 +185,14 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
             try:
                 gene = arguments["gene"][0]
                 try:
-                    id_gene = genes_dict[gene]
+                    id_gene = genes_dict[gene.upper()]
                     dic_gene = dic_info_server("sequence/id/" + id_gene)
                     sequence_gene = dic_gene["seq"]
                     seq = Seq(sequence_gene)
                     percentage_bases = seq.percentages_bases()
 
                     if l_json == 0:
-                        bases = "<br><br>"
-                        for key, value in percentage_bases.items():
-                            bases += key + " : " + str(value[0]) + ", " + str(round(value[1], 2)) + "%" + "<br>"
-                            contents = read_html_file("calculusbases.html").render(context={"gene": gene, "calc_bases": bases})
+                        contents = read_html_file("calculusbases.html").render(context={"gene": gene, "calc_bases": percentage_bases})
                     elif l_json == 1:
                         contents = json.dumps(percentage_bases)
                 except KeyError:
@@ -220,30 +207,30 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                 end = arguments["end"][0]
                 info_chromo = chromo + ":" + start + "-" + end
                 list_chromosome = dic_info_server("/phenotype/region/homo_sapiens/" + info_chromo)
-                try:
-                    genes_found = []
-                    for i in list_chromosome:
-                        for n in i["phenotype_associations"]:
-                            if "attributes" in n.keys():
-                                if "associated_gene" in n["attributes"]:
-                                    genes_found.append(n["attributes"]["associated_gene"])
-                        if len(genes_found) != 0:
-                            if l_json == 0:
+                if len(list_chromosome) == 0:
+                    contents = pathlib.Path("html/error.html").read_text()
+                else:
+                    try:
+                        genes_found = []
+                        for i in list_chromosome:
+                            for n in i["phenotype_associations"]:
+                                if "attributes" in n.keys():
+                                    if "associated_gene" in n["attributes"]:
+                                        genes_found.append(n["attributes"]["associated_gene"])
+
+                            if len(genes_found) != 0:
+                                if l_json == 0:
+                                    contents = read_html_file("chromo_genes.html").render(context={"chromo": chromo, "start": start, "end": end, "genes_found": genes_found})
+                                elif l_json == 1:
+                                    genelist_json = '{"genes": ' + json.dumps(genes_found) + "}"
+                                    contents = genelist_json
+                            else:
+                                genes_found = []
                                 contents = read_html_file("chromo_genes.html").render(context={"chromo": chromo, "start": start, "end": end, "genes_found": genes_found})
-                            elif l_json == 1:
-                                genelist_json = "{'genes': "
-                                genelist_json += json.dumps(genes_found)
-                                genelist_json += "}"
-                                contents = genelist_json
-                        else:
-                            genes_found_html = " There are no genes found"
-                            contents = read_html_file("chromo_genes.html").render(context={"chromo": chromo, "start": start, "end": end,"genes_found": genes_found_html})
-                except KeyError:
-                    contents = pathlib.Path("html/error.html").read_text()
-                except TypeError:
-                    contents = pathlib.Path("html/error.html").read_text()
-                except UnboundLocalError:
-                    contents = pathlib.Path("html/error.html").read_text()
+                    except KeyError:
+                        contents = pathlib.Path("html/error.html").read_text()
+                    except TypeError:
+                        contents = pathlib.Path("html/error.html").read_text()
             except KeyError:
                 contents = pathlib.Path("html/error.html").read_text()
 
