@@ -5,7 +5,11 @@
     <title>Genes in the chromosome given</title>
 </head>
 <body style="background-color:#D2B4DE;">
-The genes found in the chromosome {{context.chromo}} between {{context.start}} and {{context.end}} are:{{context.genes_found}}
+The genes found in the chromosome {{context.chromo}} between {{context.start}} and {{context.end}}:
+{% for a in  context.genes_found %}
+<p>{{a}}</p>
+{% endfor %}
+
 <p> <a href="/">Main page</a></p>
 </body>
 </html>

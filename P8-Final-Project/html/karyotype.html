@@ -5,7 +5,10 @@
     <title>Karyotype</title>
 </head>
 <body style="background-color:mediumseagreen;">
-The names of the chromosomes are:{{context.karyotype}}
+The names of the chromosomes are:
+<p>{% for a in context.karyotype %}</p>
+<p>{{a}}</p>
+{% endfor %}
 <p> <a href="/">Main page</a></p>
 </body>
 </html>
