@@ -90,6 +90,10 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
         elif path == "/karyotype":
             try:
                 species = arguments["specie"][0]
+                species = species.lower()
+                if species.find(" ") != -1:
+                    species = species.replace(" ", "_")
+
                 dictionary_info_1 = dic_info_server("info/species")
                 species_info_list = dictionary_info_1["species"]
                 species_name = []
@@ -118,6 +122,9 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
             try:
                 species = arguments["specie"][0]
                 chromosome = arguments["chromo"][0]
+                species = species.lower()
+                if species.find(" ") != -1:
+                    species = species.replace(" ", "_")
 
                 dic_specie = dic_info_server("info/assembly/" + species)
                 try:
@@ -142,6 +149,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
         elif path == "/geneSeq":
             try:
                 gene = arguments["gene"][0]
+                gene = gene.upper()
                 dic_specie_gene = dic_info_server("lookup/symbol/homo_sapiens/"+gene)
                 try:
                     id_gene = dic_specie_gene["id"]
@@ -161,6 +169,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
         elif path == "/geneInfo":
             try:
                 gene = arguments["gene"][0]
+                gene = gene.upper()
                 dic_specie_gene = dic_info_server("lookup/symbol/homo_sapiens/" + gene) #to look for the id in ensembl instead of doing it with the dictionary
                 try:
                     start_gene = dic_specie_gene["start"]
