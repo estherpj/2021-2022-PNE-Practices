@@ -17,7 +17,7 @@ data1 = r1.read().decode("utf-8")
 print(data1)
 
 try:
-    conn.request("GET", "/karyotype?specie=mouse&json=1")
+    conn.request("GET", "/karyotype?specie=homo_sapiens&json=1")
 except ConnectionRefusedError:
     print("ERROR! Cannot connect to the server")
 r2 = conn.getresponse()
@@ -27,7 +27,7 @@ print(data2)
 
 
 try:
-    conn.request("GET", "/chromosomeLength?specie=mouse&chromo=10&json=1")
+    conn.request("GET", "/chromosomeLength?specie=homo_sapiens&chromo=10&json=1")
 except ConnectionRefusedError:
     print("ERROR! Cannot connect to the server")
 r3 = conn.getresponse()

@@ -170,11 +170,10 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
             except KeyError:
                 contents = pathlib.Path("html/error.html").read_text()
 
-
         elif path == "/geneInfo":
             try:
                 gene = arguments["gene"][0]
-                dic_specie_gene = dic_info_server("lookup/symbol/homo_sapiens/" + gene) #to look for the id in ensembl instead of foing it with the dictionary
+                dic_specie_gene = dic_info_server("lookup/symbol/homo_sapiens/" + gene) #to look for the id in ensembl instead of doing it with the dictionary
                 try:
                     start_gene = dic_specie_gene["start"]
                     end_gene = dic_specie_gene["end"]
