@@ -247,7 +247,10 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
             contents = pathlib.Path("html/error.html").read_text()
 
         self.send_response(200)
-        self.send_header('Content-Type', 'text/html')
+        if l_json == 0:
+            self.send_header('Content-Type', 'text/html')
+        elif l_json == 1:
+            self.send_header('Content-Type', 'application/json')
         self.send_header('Content-Length', len(str.encode(contents)))
         self.end_headers()
         self.wfile.write(contents.encode())
